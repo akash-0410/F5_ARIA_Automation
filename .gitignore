@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+bootstrap/config.json
+bootstrap/created_action_ids.json
+*.pdf
+verify_page*.jpg
+node_modules/
+.DS_Store

@@ -1,0 +1,129 @@
+formatVersion: 1
+inputs:
+  location:
+    type: string
+    title: Location
+    description: Site where the virtual server will be provisioned.
+  environmentType:
+    type: string
+    title: Environment Type
+    description: Production or UAT -- narrows the F5 Cluster list to that site's devices for this environment.
+  f5Cluster:
+    type: string
+    title: F5 Cluster
+    description: Select the target F5 BIG-IP device (filtered by Location + Environment Type).
+  partition:
+    type: string
+    title: Partition
+    default: Common
+  description:
+    type: string
+    title: Description
+    description: Free-text note about this virtual server's purpose.
+  vsName:
+    type: string
+    title: Virtual Server Name
+  virtualIpAddress:
+    type: string
+    title: Virtual IP Address
+    description: Pick a free address from the list or type your own. Leave blank (or type "auto") to auto-assign one from the cluster's configured VIP subnet.
+    default: auto
+  vsType:
+    type: string
+    title: Virtual Server Type
+    default: standard
+    enum:
+      - standard
+      - performance-l4
+  vsPorts:
+    type: array
+    title: Service Port(s)
+    default:
+      - 80
+    items:
+      type: integer
+  vsProtocol:
+    type: string
+    title: Virtual IP Protocol
+    default: tcp
+    enum:
+      - tcp
+      - udp
+  vsSnat:
+    type: string
+    title: Source Address Translation (SNAT)
+    description: Automap, None, or an existing SNAT pool.
+  vsOneConnectProfile:
+    type: string
+    title: OneConnect Profile
+    default: ''
+  poolName:
+    type: string
+    title: Pool Name
+  loadBalancingMode:
+    type: string
+    title: Load Balancing Method
+    default: round-robin
+  persistenceProfile:
+    type: string
+    title: Persistence Profile
+    default: ''
+  monitorType:
+    type: string
+    title: Health Monitor Type (leave blank to skip health monitoring)
+    default: http
+  monitorInterval:
+    type: integer
+    title: Monitor Interval
+    default: 5
+  monitorTimeout:
+    type: integer
+    title: Monitor Timeout
+    default: 16
+  nodes:
+    type: array
+    title: Backend Nodes
+    items:
+      type: object
+      properties:
+        name:
+          type: string
+          title: Node Name
+        address:
+          type: string
+          title: Node Address
+        port:
+          type: integer
+          title: Port
+          default: 80
+        create_if_missing:
+          type: boolean
+          title: Create Node if Missing
+          default: true
+resources:
+  F5_Virtual_Server:
+    type: Custom.F5.VirtualServer
+    properties:
+      host: ${input.f5Cluster}
+      partition: ${input.partition}
+      verify_tls: false
+      vs:
+        name: ${input.vsName}
+        destination_ip: ${input.virtualIpAddress}
+        type: ${input.vsType}
+        ports: ${input.vsPorts}
+        protocol: ${input.vsProtocol}
+        snat: ${input.vsSnat}
+        oneconnect_profile: ${input.vsOneConnectProfile}
+        persistence_profile: ${input.persistenceProfile}
+      pool:
+        name: ${input.poolName}
+        load_balancing_mode: ${input.loadBalancingMode}
+        monitor_type: ${input.monitorType}
+        monitor_interval: ${input.monitorInterval}
+        monitor_timeout: ${input.monitorTimeout}
+      nodes: ${input.nodes}
+      poolName: ''
+      destinationIp: ''
+      virtualServers: []
+      missing: []

@@ -1,0 +1,14 @@
+{
+  "_comment": "Copy to config.json and fill in. Never commit config.json (it references a live password).",
+  "vra_host": "vra.client.example.com",
+  "vro_host": "vra.client.example.com",
+  "domain": "System Domain",
+  "username": "configadmin",
+  "password": "CHANGE_ME",
+  "project_id": "REPLACE_WITH_TARGET_PROJECT_ID",
+  "runtime": "python",
+  "runtime_version": "3.10",
+  "verify_tls": true,
+  "vro_module": "com.f5.automation",
+  "vro_tag": "com.f5.automation"
+}
